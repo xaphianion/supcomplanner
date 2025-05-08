@@ -65,15 +65,29 @@
         .reset-button:hover {
             background-color: #dc2626; /* red-600 */
         }
+        .beta-warning {
+            background-color: #fefce8; /* yellow-50 */
+            border: 1px solid #facc15; /* yellow-400 */
+            color: #ca8a04; /* yellow-600 */
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            margin-bottom: 1.5rem; /* mb-6 */
+            font-size: 0.875rem; /* text-sm */
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100 text-gray-800 p-4 md:p-8">
 
-    <div class="container mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-xl"> <header class="mb-6 text-center">
+    <div class="container mx-auto max-w-4xl bg-white p-6 rounded-lg shadow-xl">
+        <header class="mb-4 text-center">
             <h1 class="text-3xl font-bold text-blue-700">DC Dark Legion: Supreme Commander Event Planner</h1>
-            <p class="text-sm text-gray-500">Interactive Spending Edition</p>
+            <p class="text-sm text-gray-500">Interactive Spending Edition - <span class="font-semibold text-purple-600">v0.1.2 (Beta)</span></p>
         </header>
+
+        <div class="beta-warning text-center">
+            <p><strong>Please Note:</strong> This tool is currently in Beta. Calculations and features may change. Use with this understanding and please report any bugs or issues!</p>
+        </div>
 
         <nav class="mb-6">
             <ul class="flex border-b border-gray-300">
@@ -100,6 +114,7 @@
     </div>
 
     <footer class="text-center mt-8 text-sm text-gray-500">
+        <p>Version: <span class="font-semibold">v0.1.2 (Beta)</span></p>
         <p>Plan your resources wisely! Good luck, Commanders!</p>
     </footer>
 
@@ -113,7 +128,7 @@
             day1: "Intel Gathering", day2: "Mother Box Activation", day3: "Base Expansion",
             day4: "Champion Training", day5: "Final Sprint",
         },
-        resources: { // Defines resources and their display units
+        resources: { 
             anvil: { name: "World Anvil Fragment", unit: "Fragment(s)" },
             intel: { name: "Intel Points", unit: "Intel Point(s)" },
             greenBox: { name: "Green Mother Box", unit: "Green Box(es)" },
@@ -124,72 +139,58 @@
             legendaryLegacy: { name: "Legendary Legacy Piece Evolution", unit: "Evolution(s)" },
             mythicLegacy: { name: "Mythic Legacy Piece Evolution", unit: "Evolution(s)" },
             drone: { name: "Drone", unit: "Drone(s)" },
-            alloy: { name: "Alloy", unit: "Alloy", isBulkResource: true }, // Mark bulk resources
-            chips: { name: "Chips", unit: "Chip(s)", isBulkResource: true }, // Mark bulk resources
+            alloy: { name: "Alloy", unit: "Alloy", isBulkResource: true },
+            chips: { name: "Chips", unit: "Chip(s)", isBulkResource: true },
             legendaryShard: { name: "Legendary Champion Shard", unit: "Shard(s)" },
             mythicShard: { name: "Mythic Champion Shard", unit: "Shard(s)" },
         },
-        objectivesConfig: [ // Configuration for each objective type
-            // Standard objectives (direct resource to points)
+        objectivesConfig: [
             { id: "anvil", appliesToDays: ["day1", "day2", "day3", "day4", "day5"], type: "standard", resourceKey: "anvil", pointsPerUnit: 300 },
             { id: "intel", appliesToDays: ["day1", "day5"], type: "standard", resourceKey: "intel", pointsPerUnit: 15 },
-            { // Mother Box group - points are based on "MB Value" of each box type
+            {
                 id: "motherBoxes", appliesToDays: ["day2", "day5"], type: "motherBoxGroup",
-                label: "Gain Mother Box Points", // Display label for the group
-                pointsPerMBPoint: 30, // Points awarded per 1 "MB Point"
-                boxes: [ // Individual box types within this group
-                    { id: "greenBox", resourceKey: "greenBox", mbValue: 1 },    // 1 MB Point for a green box
-                    { id: "blueBox", resourceKey: "blueBox", mbValue: 10 },   // 10 MB Points for a blue box
-                    { id: "purpleBox", resourceKey: "purpleBox", mbValue: 20 }, // 20 MB Points for a purple box
-                    { id: "yellowBox", resourceKey: "yellowBox", mbValue: 50 }, // 50 MB Points for a yellow box
+                label: "Gain Mother Box Points",
+                pointsPerMBPoint: 30,
+                boxes: [
+                    { id: "greenBox", resourceKey: "greenBox", mbValue: 1 },
+                    { id: "blueBox", resourceKey: "blueBox", mbValue: 10 },
+                    { id: "purpleBox", resourceKey: "purpleBox", mbValue: 20 },
+                    { id: "yellowBox", resourceKey: "yellowBox", mbValue: 50 },
                 ]
             },
             { id: "epicLegacy", appliesToDays: ["day2", "day5"], type: "standard", resourceKey: "epicLegacy", pointsPerUnit: 120 },
             { id: "legendaryLegacy", appliesToDays: ["day2", "day5"], type: "standard", resourceKey: "legendaryLegacy", pointsPerUnit: 1200 },
             { id: "mythicLegacy", appliesToDays: ["day2", "day5"], type: "standard", resourceKey: "mythicLegacy", pointsPerUnit: 6000 },
             { id: "drone", appliesToDays: ["day3", "day5"], type: "standard", resourceKey: "drone", pointsPerUnit: 30 },
-            { id: "alloy", appliesToDays: ["day3", "day5"], type: "standard", resourceKey: "alloy", pointsPerUnit: 0.003 }, // 3 points per 1000 alloy
-            { id: "chips", appliesToDays: ["day3", "day5"], type: "standard", resourceKey: "chips", pointsPerUnit: 0.03 },   // 3 points per 100 chips
+            { id: "alloy", appliesToDays: ["day3", "day5"], type: "standard", resourceKey: "alloy", pointsPerUnit: 0.003 },
+            { id: "chips", appliesToDays: ["day3", "day5"], type: "standard", resourceKey: "chips", pointsPerUnit: 0.03 },
             { id: "legendaryShard", appliesToDays: ["day4", "day5"], type: "standard", resourceKey: "legendaryShard", pointsPerUnit: 120 },
             { id: "mythicShard", appliesToDays: ["day4", "day5"], type: "standard", resourceKey: "mythicShard", pointsPerUnit: 600 },
         ],
-        day5Multiplier: 2/3, // Day 5 points are 2/3 of their normal value
+        day5Multiplier: 2/3,
     };
 
-    // --- UTILITY FUNCTIONS ---
+    let spentResourcesData = {};
 
-    /**
-     * Formats a number into a more readable string (e.g., 1.2k, 3.5m).
-     * @param {number} num - The number to format.
-     * @returns {string} The formatted number string.
-     */
     function formatNumber(num) {
-        if (num === null || num === undefined || isNaN(num)) return '0'; // Handle invalid inputs
-        if (num < 100000) { // For numbers 0 - 99,999, show with commas and up to 1 decimal
+        if (num === null || num === undefined || isNaN(num)) return '0';
+        if (num < 100000) {
             return num.toLocaleString(undefined, { maximumFractionDigits: 1 });
-        } else if (num < 1000000) { // For numbers 100,000 - 999,999, show as 'k'
+        } else if (num < 1000000) {
             return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-        } else if (num < 1000000000) { // For numbers 1,000,000 - 999,999,999, show as 'm'
+        } else if (num < 1000000000) {
             return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
         }
-        // Fallback for very large numbers or other unexpected cases
         return num.toLocaleString(undefined, { maximumFractionDigits: 1 });
     }
 
-    /**
-     * Processes the objectives configuration for a specific day, applying day-specific logic
-     * like the Day 5 multiplier and enriching objectives with display names and units.
-     * @param {string} dayKey - The key for the day (e.g., "day1", "day2").
-     * @returns {Array<Object>} An array of processed objective objects for the given day.
-     */
     function getProcessedObjectivesForDay(dayKey) {
         const processedObjectives = [];
         eventData.objectivesConfig.forEach(config => {
             if (config.appliesToDays.includes(dayKey)) {
-                const objective = JSON.parse(JSON.stringify(config)); // Deep clone to avoid modifying original config
-                objective.currentDay = dayKey; // Add current day context
+                const objective = JSON.parse(JSON.stringify(config));
+                objective.currentDay = dayKey;
 
-                // Apply Day 5 multiplier if applicable
                 if (dayKey === 'day5') {
                     if (objective.type === "standard") {
                         objective.pointsPerUnit *= eventData.day5Multiplier;
@@ -198,12 +199,11 @@
                     }
                 }
                 
-                // Enrich standard objectives with resource details
                 if (objective.type === "standard" && objective.resourceKey && eventData.resources[objective.resourceKey]) {
                     objective.displayUnitName = eventData.resources[objective.resourceKey].unit;
                     objective.displayName = eventData.resources[objective.resourceKey].name;
                     objective.isBulkResource = !!eventData.resources[objective.resourceKey].isBulkResource;
-                } else if (objective.type === "motherBoxGroup") { // Enrich mother box sub-items
+                } else if (objective.type === "motherBoxGroup") {
                      objective.boxes.forEach(box => {
                         if (box.resourceKey && eventData.resources[box.resourceKey]) {
                             box.displayUnitName = eventData.resources[box.resourceKey].unit;
@@ -218,23 +218,14 @@
         return processedObjectives;
     }
 
-    // --- UI GENERATION AND UPDATES ---
     const tabContentContainer = document.getElementById('tabContentContainer');
 
-    /**
-     * Creates the HTML structure for a single day's tab view.
-     * @param {string} dayKey - The key for the day (e.g., "day1").
-     * @returns {HTMLElement} The div element representing the tab content.
-     */
     function createDayTabView(dayKey) {
         const targetPoints = eventData.dailyTargets[dayKey];
         const dayTheme = eventData.themes[dayKey];
-
         const tabDiv = document.createElement('div');
-        tabDiv.id = `${dayKey}_tab`; // Unique ID for the tab content
-        tabDiv.classList.add('tab-content', 'p-4'); // Basic styling for tab content
-
-        // Inner HTML for the tab, including title, target, score input, reset button, and table
+        tabDiv.id = `${dayKey}_tab`;
+        tabDiv.classList.add('tab-content', 'p-4');
         tabDiv.innerHTML = `
             <div class="mb-6">
                 <h2 class="text-xl font-semibold text-gray-700 mb-1">${dayTheme} (Day ${dayKey.slice(-1)})</h2>
@@ -258,66 +249,53 @@
                             <th>Qty Needed (After Spending)</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         `;
         return tabDiv;
     }
 
-    /**
-     * Updates the results table for a given day based on current score and spent resources.
-     * Calculates points needed and quantities for each objective.
-     * @param {string} dayKey - The key for the day (e.g., "day1").
-     */
     function updateResultsTableForDay(dayKey) {
-        // Get references to DOM elements for the current day
         const currentScoreInput = document.getElementById(`currentScore_${dayKey}`);
         const tableBody = document.querySelector(`#resultsTable_${dayKey} tbody`);
         const pointsNeededMessageDiv = document.getElementById(`pointsNeededMessage_${dayKey}`);
         
-        // Basic error handling if elements are not found
         if (!tableBody || !currentScoreInput || !pointsNeededMessageDiv) {
-            console.error("Required elements not found for day:", dayKey);
-            return;
+            console.error("Required elements not found for day:", dayKey); return;
         }
-        tableBody.innerHTML = ''; // Clear previous table rows
+        
+        const activeElementId = document.activeElement?.id; // Store focused element's ID
+        const activeElementSelectionStart = (document.activeElement && typeof document.activeElement.selectionStart === 'number') ? document.activeElement.selectionStart : null;
+        const activeElementSelectionEnd = (document.activeElement && typeof document.activeElement.selectionEnd === 'number') ? document.activeElement.selectionEnd : null;
 
-        // Get current score and daily target
+        tableBody.innerHTML = ''; 
+
         const currentScore = parseInt(currentScoreInput.value) || 0;
         const dailyTarget = eventData.dailyTargets[dayKey];
         let initialPointsNeeded = dailyTarget - currentScore;
         let pointsEarnedFromSpending = 0;
-
         const objectivesForDay = getProcessedObjectivesForDay(dayKey);
 
-        // First pass: Calculate total points earned from "My Spent Resources" inputs
         objectivesForDay.forEach(obj => {
             if (obj.type === "standard") {
-                const spentInput = document.getElementById(`spend_${obj.id}_${dayKey}`);
-                const spentQuantity = spentInput ? (parseInt(spentInput.value) || 0) : 0;
+                const spentQuantity = spentResourcesData[dayKey]?.[obj.id] || 0;
                 pointsEarnedFromSpending += spentQuantity * obj.pointsPerUnit;
             } else if (obj.type === "motherBoxGroup") {
                 obj.boxes.forEach(box => {
-                    const spentInput = document.getElementById(`spend_${box.id}_${dayKey}`);
-                    const spentQuantity = spentInput ? (parseInt(spentInput.value) || 0) : 0;
-                    // Points from mother boxes = quantity * MB value of the box * points per MB point
+                    const spentQuantity = spentResourcesData[dayKey]?.[box.id] || 0;
                     pointsEarnedFromSpending += spentQuantity * (box.mbValue * obj.pointsPerMBPoint);
                 });
             }
         });
 
-        // Calculate final points needed after considering what the user has input as "spent"
         const finalPointsNeeded = initialPointsNeeded - pointsEarnedFromSpending;
 
-        // Update the "Points Needed" message
         if (finalPointsNeeded <= 0) {
             pointsNeededMessageDiv.innerHTML = `<p class="text-green-600 font-semibold">Target Met or Exceeded (after considering spent resources)!</p>`;
             if (pointsEarnedFromSpending > 0) {
                  pointsNeededMessageDiv.innerHTML += `<p class="text-sm text-gray-500">You've planned to earn ${pointsEarnedFromSpending.toLocaleString()} points.</p>`;
             }
-            // If target met, display a message in the table
             tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4">No further actions needed.</td></tr>`;
         } else {
             pointsNeededMessageDiv.innerHTML = `<p>After spending, you still need <strong class="text-blue-700">${finalPointsNeeded.toLocaleString()}</strong> more points.</p>`;
@@ -326,48 +304,41 @@
             }
         }
 
-        // Second pass: Populate the table rows with objectives and calculated quantities needed
         objectivesForDay.forEach(obj => {
             if (obj.type === "standard") {
                 const effectivePointsPerUnit = obj.pointsPerUnit;
                 const row = tableBody.insertRow();
-                
-                row.insertCell().textContent = obj.displayName || obj.id; // Action name
-                // Points per unit, formatted based on whether it's a bulk resource
+                row.insertCell().textContent = obj.displayName || obj.id;
                 row.insertCell().textContent = `${effectivePointsPerUnit.toFixed(obj.isBulkResource ? 3 : 2)} pts / ${obj.displayUnitName.replace(/\(s\)?$/, '')}`;
                 
-                // Input field for "My Spent Resources"
                 const spendInputCell = row.insertCell();
                 const spendInput = document.createElement('input');
                 spendInput.type = 'number';
-                spendInput.id = `spend_${obj.id}_${dayKey}`; // Unique ID for this input
-                // Preserve existing value if the table is just re-rendering
-                spendInput.value = document.getElementById(spendInput.id)?.value || "0"; 
+                spendInput.id = `spend_${obj.id}_${dayKey}`;
+                spendInput.value = spentResourcesData[dayKey]?.[obj.id] || "0";
                 spendInput.min = "0";
-                spendInput.addEventListener('input', () => updateResultsTableForDay(dayKey)); // Re-calculate on input
+                spendInput.addEventListener('input', (event) => {
+                    spentResourcesData[dayKey][obj.id] = parseInt(event.target.value) || 0;
+                    updateResultsTableForDay(dayKey); 
+                });
                 spendInputCell.appendChild(spendInput);
 
-                // "Quantity Needed" cell
                 const neededCell = row.insertCell();
                 if (effectivePointsPerUnit > 0 && finalPointsNeeded > 0) {
                     const actionsRequired = finalPointsNeeded / effectivePointsPerUnit;
-                    // Format quantity: use formatNumber for bulk, otherwise toFixed(1)
                     neededCell.innerHTML = `<strong>${obj.isBulkResource ? formatNumber(actionsRequired) : actionsRequired.toFixed(1)}</strong> ${obj.displayUnitName}`;
                 } else {
-                    neededCell.innerHTML = `<strong>0</strong> ${obj.displayUnitName}`; // If no points needed or no points per unit
+                    neededCell.innerHTML = `<strong>0</strong> ${obj.displayUnitName}`;
                 }
 
             } else if (obj.type === "motherBoxGroup") {
                 const effectivePointsPerMBPoint = obj.pointsPerMBPoint;
-                
-                // Add a header row for the Mother Box group
                 const groupRow = tableBody.insertRow();
-                groupRow.classList.add('font-semibold', 'bg-blue-50'); // Styling for group row
-                groupRow.insertCell().textContent = obj.label; // Group label (e.g., "Gain Mother Box Points")
-                groupRow.insertCell().textContent = `${effectivePointsPerMBPoint.toFixed(2)} pts / MB Point`; // Points per "MB Point"
-                groupRow.insertCell().textContent = `(See individual boxes below)`; // Placeholder for group spend column
+                groupRow.classList.add('font-semibold', 'bg-blue-50');
+                groupRow.insertCell().textContent = obj.label;
+                groupRow.insertCell().textContent = `${effectivePointsPerMBPoint.toFixed(2)} pts / MB Point`;
+                groupRow.insertCell().textContent = `(See individual boxes below)`;
                 
-                // Calculate and display total "MB Points" needed for the group
                 const neededMBPointsCell = groupRow.insertCell();
                 if (effectivePointsPerMBPoint > 0 && finalPointsNeeded > 0) {
                     const totalMBPointsRequired = finalPointsNeeded / effectivePointsPerMBPoint;
@@ -376,26 +347,25 @@
                     neededMBPointsCell.innerHTML = `<strong>0</strong> Total MB Points`;
                 }
 
-                // Add sub-rows for each type of Mother Box
                 obj.boxes.forEach(box => {
-                    const pointsPerThisBox = box.mbValue * effectivePointsPerMBPoint; // Points for one of this specific box
+                    const pointsPerThisBox = box.mbValue * effectivePointsPerMBPoint;
                     const subRow = tableBody.insertRow();
-                    subRow.classList.add('motherbox-sub-item'); // Styling for sub-items
+                    subRow.classList.add('motherbox-sub-item');
+                    subRow.insertCell().textContent = `└─ ${box.displayName || box.id}`;
+                    subRow.insertCell().textContent = `${pointsPerThisBox.toFixed(2)} pts / ${box.displayUnitName.replace(/\(s\)?$/, '')}`;
                     
-                    subRow.insertCell().textContent = `└─ ${box.displayName || box.id}`; // Indented box name
-                    subRow.insertCell().textContent = `${pointsPerThisBox.toFixed(2)} pts / ${box.displayUnitName.replace(/\(s\)?$/, '')}`; // Points per this box
-                    
-                    // Input field for "My Spent Resources" for this specific box type
                     const spendInputCell = subRow.insertCell();
                     const spendInput = document.createElement('input');
                     spendInput.type = 'number';
-                    spendInput.id = `spend_${box.id}_${dayKey}`; // Unique ID for each box type's input
-                    spendInput.value = document.getElementById(spendInput.id)?.value || "0"; // Preserve value
+                    spendInput.id = `spend_${box.id}_${dayKey}`;
+                    spendInput.value = spentResourcesData[dayKey]?.[box.id] || "0";
                     spendInput.min = "0";
-                    spendInput.addEventListener('input', () => updateResultsTableForDay(dayKey)); // Re-calculate on input
+                    spendInput.addEventListener('input', (event) => {
+                        spentResourcesData[dayKey][box.id] = parseInt(event.target.value) || 0;
+                        updateResultsTableForDay(dayKey);
+                    });
                     spendInputCell.appendChild(spendInput);
 
-                    // "Quantity Needed" for this specific box type
                     const neededCell = subRow.insertCell();
                     if (pointsPerThisBox > 0 && finalPointsNeeded > 0) {
                         const numBoxesRequired = finalPointsNeeded / pointsPerThisBox;
@@ -406,55 +376,55 @@
                 });
             }
         });
-         // If no objectives are applicable for the day but points are still needed
-         if (tableBody.rows.length === 0 && finalPointsNeeded > 0) {
+        if (tableBody.rows.length === 0 && finalPointsNeeded > 0) {
              tableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-orange-600">No specific actions defined for today to earn points.</td></tr>`;
+        }
+
+        // Restore focus and selection after table re-render
+        if (activeElementId) {
+            const newActiveElement = document.getElementById(activeElementId);
+            if (newActiveElement && typeof newActiveElement.focus === 'function') {
+                newActiveElement.focus();
+                if (activeElementSelectionStart !== null && activeElementSelectionEnd !== null && typeof newActiveElement.setSelectionRange === 'function') {
+                    try {
+                        newActiveElement.setSelectionRange(activeElementSelectionStart, activeElementSelectionEnd);
+                    } catch (e) {
+                        console.warn("Could not restore selection range.", e);
+                    }
+                }
+            }
         }
     }
     
-    /**
-     * Resets all "My Spent Resources" input fields for a given day to "0".
-     * @param {string} dayKey - The key for the day (e.g., "day1").
-     */
     function resetSpentInputsForDay(dayKey) {
-        const objectivesForDay = getProcessedObjectivesForDay(dayKey); // Get objectives to find input IDs
-        objectivesForDay.forEach(obj => {
-            if (obj.type === "standard") {
-                const spendInput = document.getElementById(`spend_${obj.id}_${dayKey}`);
-                if (spendInput) spendInput.value = "0";
-            } else if (obj.type === "motherBoxGroup") {
-                obj.boxes.forEach(box => {
-                    const spendInput = document.getElementById(`spend_${box.id}_${dayKey}`);
-                    if (spendInput) spendInput.value = "0";
-                });
-            }
-        });
-        updateResultsTableForDay(dayKey); // Refresh table after resetting inputs
+        if (spentResourcesData[dayKey]) {
+            const objectivesForDay = getProcessedObjectivesForDay(dayKey);
+            objectivesForDay.forEach(obj => {
+                if (obj.type === "standard") {
+                    spentResourcesData[dayKey][obj.id] = 0;
+                } else if (obj.type === "motherBoxGroup") {
+                    obj.boxes.forEach(box => {
+                        spentResourcesData[dayKey][box.id] = 0;
+                    });
+                }
+            });
+        }
+        updateResultsTableForDay(dayKey);
     }
 
-    // --- INITIALIZATION & TAB HANDLING ---
-    /**
-     * Initializes tab switching functionality.
-     * Sets up event listeners for tab buttons.
-     */
     function initTabs() {
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
-
         tabButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Deactivate all tabs and content
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 tabContents.forEach(content => content.classList.remove('active'));
-                // Activate clicked tab and corresponding content
                 button.classList.add('active');
-                const targetTabId = button.dataset.tab; // Get target tab ID from data attribute
+                const targetTabId = button.dataset.tab;
                 const targetContent = document.getElementById(targetTabId);
                 if (targetContent) targetContent.classList.add('active');
             });
         });
-
-        // Activate the first tab by default if tabs exist
         if (tabButtons.length > 0) {
             const firstTabContent = document.getElementById(tabButtons[0].dataset.tab);
             if (firstTabContent) {
@@ -464,32 +434,34 @@
         }
     }
 
-    // --- DOMContentLoaded Event Listener ---
-    // Ensures the script runs after the full HTML document has been loaded and parsed.
     document.addEventListener('DOMContentLoaded', () => {
-        const dayKeys = ['day1', 'day2', 'day3', 'day4', 'day5']; // Define the sequence of days
-
-        // Loop through each day to create its tab view and set up event listeners
+        const dayKeys = ['day1', 'day2', 'day3', 'day4', 'day5'];
         dayKeys.forEach(dayKey => {
-            const dayTabView = createDayTabView(dayKey); // Create the HTML for the day's tab
-            tabContentContainer.appendChild(dayTabView); // Add it to the page
+            spentResourcesData[dayKey] = {};
+            const objectivesForDay = getProcessedObjectivesForDay(dayKey);
+            objectivesForDay.forEach(obj => {
+                if (obj.type === "standard") {
+                    spentResourcesData[dayKey][obj.id] = 0;
+                } else if (obj.type === "motherBoxGroup") {
+                    obj.boxes.forEach(box => {
+                        spentResourcesData[dayKey][box.id] = 0;
+                    });
+                }
+            });
 
-            // Add event listener to "My Current Score" input for this day
+            const dayTabView = createDayTabView(dayKey);
+            tabContentContainer.appendChild(dayTabView);
             const currentScoreInput = document.getElementById(`currentScore_${dayKey}`);
             if (currentScoreInput) {
                 currentScoreInput.addEventListener('input', () => updateResultsTableForDay(dayKey));
             }
-            
-            // Add event listener to "Reset Spent Resources" button for this day
             const resetBtn = document.getElementById(`resetSpent_${dayKey}`);
             if(resetBtn) {
                 resetBtn.addEventListener('click', () => resetSpentInputsForDay(dayKey));
             }
-            
-            updateResultsTableForDay(dayKey); // Initial calculation and population of the table for this day
+            updateResultsTableForDay(dayKey);
         });
-        
-        initTabs(); // Initialize tab switching functionality
+        initTabs();
     });
 </script>
 </body>
